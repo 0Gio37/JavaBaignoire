@@ -15,14 +15,14 @@ public class Robinet implements Runnable{
 
         while(baignoire.getVolumeActuel() + this.volumeDebite < baignoire.getVolumeMax()){
             baignoire.setVolumeActuel(baignoire.getVolumeActuel() + this.volumeDebite);
-            System.out.println("Niveau baignoire post débit : " + baignoire.getVolumeActuel());
+            System.out.println(" Niveau après débit de "+this.volumeDebite+" = " + baignoire.getVolumeActuel());
         }
         if(baignoire.getVolumeActuel() + this.volumeDebite == baignoire.getVolumeMax()){
             baignoire.setVolumeActuel(baignoire.getVolumeActuel() + this.volumeDebite);
-            System.out.println("Niveau baignoire post débit : " + baignoire.getVolumeActuel());
-            System.out.println("la baignoire est à ras bord");
+            System.out.println(" Niveau après débit = " + baignoire.getVolumeActuel());
+            System.out.println("==> la baignoire est à ras bord <==");
         }else {
-            System.out.println("la baignoire débordera au prochain débit");
+            System.out.println("==> la baignoire débordera au prochain débit <==");
         }
 
 

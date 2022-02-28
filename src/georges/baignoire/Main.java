@@ -3,8 +3,8 @@ package georges.baignoire;
 public class Main {
 
     public static void main(String[] args) {
-        Baignoire baignoire = new Baignoire(300, 10);
-        Robinet robinet = new Robinet(baignoire, 90);
+        Baignoire baignoire = new Baignoire(500, 10);
+        Robinet robinet = new Robinet(baignoire, 50);
         Thread threadBaignoire = new Thread(baignoire);
         Thread threadRobinet = new Thread(robinet);
 
