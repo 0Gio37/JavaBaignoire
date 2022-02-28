@@ -9,7 +9,7 @@ public class Baignoire implements Runnable{
     public Baignoire(int volumeMax, int volumeFuite){
         this.volumeMax = volumeMax;
         this.volumeFuite = volumeFuite;
-        this.volumeActuel = 0;
+        this.volumeActuel = 50;
     }
 
     public int getVolumeMax() {
@@ -29,8 +29,23 @@ public class Baignoire implements Runnable{
     }
 
 
-    public void fuite(){
-        if(this.getVolumeActuel() == 0){
+    public void fuite() {
+
+        while(this.getVolumeActuel() - this.volumeFuite > 0) {
+            this.setVolumeActuel(this.getVolumeActuel() - this.volumeFuite);
+            System.out.println("Niveau baignoire : " + this.getVolumeActuel());
+        }
+        if (this.getVolumeActuel() - this.volumeFuite == 0) {
+            this.setVolumeActuel(this.getVolumeActuel() - this.volumeFuite);
+            System.out.println("Niveau baignoire : " + this.getVolumeActuel());
+            System.out.println("la baignoire est vide");
+        } else {
+            System.out.println("la baignoire est déjà vidée");
+        }
+    }
+
+
+        /*if(this.getVolumeActuel() == 0){
             this.setVolumeFuite(this.volumeFuite - 1);
             System.out.println("Volume fuite après colmatage :"+this.volumeFuite);
         }
@@ -40,7 +55,7 @@ public class Baignoire implements Runnable{
         } else{
             System.out.println("La beignoire est vidée");
         }
-    }
+    }*/
 
     @Override
     public void run() {

@@ -12,17 +12,20 @@ public class Robinet implements Runnable{
 
 
     public void debite(){
-        int volApresDebit = baignoire.getVolumeActuel() + this.volumeDebite;
 
-        if (volApresDebit == baignoire.getVolumeMax()) {
-            baignoire.setVolumeActuel(volApresDebit);
-            System.out.println("Volume max de la baignoire atteint : "+ baignoire.getVolumeMax());
-        } else if(volApresDebit < baignoire.getVolumeMax() ){
-            baignoire.setVolumeActuel(volApresDebit);
-            System.out.println("Volume après debit : "+ baignoire.getVolumeActuel());
-        } else{
-            System.out.println("avec ce débit supp, la baignoire débordera !");
+        while(baignoire.getVolumeActuel() + this.volumeDebite < baignoire.getVolumeMax()){
+            baignoire.setVolumeActuel(baignoire.getVolumeActuel() + this.volumeDebite);
+            System.out.println("Niveau baignoire : " + baignoire.getVolumeActuel());
         }
+        if(baignoire.getVolumeActuel() + this.volumeDebite == baignoire.getVolumeMax()){
+            baignoire.setVolumeActuel(baignoire.getVolumeActuel() + this.volumeDebite);
+            System.out.println("Niveau baignoire : " + baignoire.getVolumeActuel());
+            System.out.println("la baignoire est à ras bord");
+        }else {
+            System.out.println("la baignoire débordera au prochain débit");
+        }
+
+
     }
 
 
