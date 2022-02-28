@@ -1,6 +1,6 @@
 package georges.baignoire;
 
-public class Robinet {
+public class Robinet implements Runnable{
 
     public Baignoire baignoire;
     public int volumeDebite;
@@ -18,14 +18,15 @@ public class Robinet {
 
         } else if(baignoire.getVolumeActuel() + this.volumeDebite < baignoire.getVolumeMax() ){
             baignoire.setVolumeActuel(baignoire.getVolumeActuel() + this.volumeDebite);
-            System.out.println("Volume total versé :"+ baignoire.getVolumeActuel());
+            System.out.println("Volume après debit : "+ baignoire.getVolumeActuel());
         } else{
-            System.out.println("avec ce débit supp, la baignoire va déborder !");
+            System.out.println("avec ce débit supp, la baignoire débordera !");
         }
-
-
     }
 
 
-
+    @Override
+    public void run() {
+        debite();
+    }
 }
