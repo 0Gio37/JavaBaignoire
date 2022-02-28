@@ -18,9 +18,9 @@ public class Robinet {
 
         } else if(baignoire.getVolumeActuel() + this.volumeDebite < baignoire.getVolumeMax() ){
             baignoire.setVolumeActuel(baignoire.getVolumeActuel() + this.volumeDebite);
-            System.out.println(baignoire.getVolumeActuel());
+            System.out.println("Volume total versé :"+ baignoire.getVolumeActuel());
         } else{
-            System.out.println("la baignoire va débordée");
+            System.out.println("avec ce débit supp, la baignoire va déborder !");
         }
 
 
