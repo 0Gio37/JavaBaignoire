@@ -2,35 +2,48 @@ package georges.baignoire;
 
 public class Robinet implements Runnable{
 
-    public Baignoire baignoire;
-    public int volumeDebite;
+    private Baignoire baignoire;
+    private int volumeDebite;
 
     public Robinet(Baignoire baignoire, int volumeDebite) {
         this.baignoire = baignoire;
         this.volumeDebite = volumeDebite;
     }
 
+    public void debite() throws InterruptedException {
 
-    public void debite(){
+        while (baignoire.getVolume() + volumeDebite <= baignoire.getVolumeMax()) {
 
-        while(baignoire.getVolumeActuel() + this.volumeDebite < baignoire.getVolumeMax()){
-            baignoire.setVolumeActuel(baignoire.getVolumeActuel() + this.volumeDebite);
-            System.out.println(" Niveau après débit de "+this.volumeDebite+" = " + baignoire.getVolumeActuel());
+            if (baignoire.getNbFuite() > 10) {
+
+                synchronized (this) {
+                    System.out.println("OULALA ça fuit !!!!!!");
+                    // on coupe le robinet, on le met en attente
+                    this.wait();
+                }
+
+                System.out.println("C'est bon on remet de l'eau");
+            }
+
+            synchronized (baignoire) {
+                baignoire.setVolume(baignoire.getVolume() + volumeDebite);
+                System.out.println("Je rempli -> le volume de la baignoire est : " + baignoire.getVolume());
+            }
+
+            Thread.sleep(1);
         }
-        if(baignoire.getVolumeActuel() + this.volumeDebite == baignoire.getVolumeMax()){
-            baignoire.setVolumeActuel(baignoire.getVolumeActuel() + this.volumeDebite);
-            System.out.println(" Niveau après débit = " + baignoire.getVolumeActuel());
-            System.out.println("==> la baignoire est à ras bord <==");
-        }else {
-            System.out.println("==> la baignoire débordera au prochain débit <==");
-        }
 
+        System.out.println("C'est bon je me suis fait coulé un bain");
 
     }
-
 
     @Override
     public void run() {
-        debite();
+        try {
+            debite();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
+
 }

@@ -2,53 +2,83 @@ package georges.baignoire;
 
 public class Baignoire implements Runnable{
 
-    public int volumeMax;
-    public int volumeActuel;
-    public int volumeFuite;
+    private Robinet robinet;
+    private int volumeMax;
 
-    public Baignoire(int volumeMax, int volumeFuite){
+    private int volume;
+
+    private int volumeDeFuite;
+
+    private int nbFuite;
+
+    public Baignoire( int volumeMax, int volumeDeFuite) {
+
         this.volumeMax = volumeMax;
-        this.volumeFuite = volumeFuite;
-        this.volumeActuel = 0;
+        volume = 0;
+        this.volumeDeFuite = volumeDeFuite;
+        nbFuite = 0;
+    }
+
+    public void fuit() throws InterruptedException {
+
+        while (volumeDeFuite > 0) {
+
+            if (volume == 0) {
+                // Je n'ai pas d'eau et je peux colmater
+                volumeDeFuite -= 1;
+            } else {
+                nbFuite++;
+
+                synchronized (this) {
+                    if (volume - volumeDeFuite < 0) {
+                        volume = 0;
+                    } else {
+                        volume = volume - volumeDeFuite;
+                    }
+                    System.out.println("Ca fuit ---> le volume de la baignoire est : " + volume);
+                }
+            }
+
+            Thread.sleep(1);
+
+        }
+
+        synchronized (robinet) {
+            System.out.println("Ca ne fuit plus, la fuite a été colmatée, on peut relancer le robinet !!!");
+            robinet.notify();
+            nbFuite = 0;
+        }
+
+    }
+
+    public int getVolume() {
+        return volume;
     }
 
     public int getVolumeMax() {
         return volumeMax;
     }
 
-    public int getVolumeActuel() {
-        return volumeActuel;
+    public void setVolume(int volume) {
+        this.volume = volume;
     }
 
-    public void setVolumeActuel(int volumeActuel) {
-        this.volumeActuel = volumeActuel;
+    public int getNbFuite() {
+        return nbFuite;
     }
 
-    public void setVolumeFuite(int volumeFuite) {
-        this.volumeFuite = volumeFuite;
+    public void setRobinet(Robinet robinet) {
+        this.robinet = robinet;
     }
-
-    public void fuite() {
-
-        while(this.getVolumeActuel() - this.volumeFuite > 0) {
-            this.setVolumeActuel(this.getVolumeActuel() - this.volumeFuite);
-            System.out.println(" Niveau après fuite de " +this.volumeFuite+" : " + this.getVolumeActuel());
-        }
-        if(this.getVolumeActuel() - this.volumeFuite == 0){
-            this.setVolumeFuite(this.volumeFuite - 1);
-        }else {
-            this.setVolumeActuel(-1);
-            System.out.println("==> la baignoire est vide <==");
-        }
-
-    }
-
 
     @Override
     public void run() {
-        fuite();
+        try {
+            fuit();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
-
-}
+    }
